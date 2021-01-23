@@ -67,14 +67,13 @@ app.get('/api/notes/:id', (request, response, next) => {
       }
     })
     .catch(error => {
-      console.log("WAT IS THIS")
       next(error)
     })
 })
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
