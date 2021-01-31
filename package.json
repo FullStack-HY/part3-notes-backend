@@ -11,7 +11,8 @@
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "author": "",
   "license": "ISC",
