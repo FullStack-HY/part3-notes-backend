@@ -1,24 +1,24 @@
+require('dotenv').config()
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
-notesRouter.get('/', async (request, response) => { 
+notesRouter.get('/', async (request, response) => {
   const notes = await Note.find({})
-  response.json(notes.map(note => note.toJSON()))
+  response.json(notes)
 })
 
-notesRouter.get('/:id', (request, response, next) => {
-  Note.findById(request.params.id)
-    .then(note => {
-      if (note) {
-        response.json(note.toJSON())
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+notesRouter.get('/:id', async (request, response, next) => {
+  
+    const note = await Note.findById(request.params.id)
+    if (note) {
+      response.json(note)
+    } else {
+      response.status(404).end()
+    }
+
 })
 
-notesRouter.post('/', (request, response, next) => {
+notesRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const note = new Note({
@@ -26,21 +26,17 @@ notesRouter.post('/', (request, response, next) => {
     important: body.important || false,
     date: new Date(),
   })
+    const savedNote = await note.save()
+    response.json(savedNote)
 
-  note.save()
-    .then(savedNote => {
-      response.json(savedNote.toJSON())
-    })
-    .catch(error => next(error))
 })
 
-notesRouter.delete('/:id', (request, response, next) => {
-  Note.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
-})
+notesRouter.delete('/:id', async (request, response, next) => {
+
+    await Note.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+ 
+  })
 
 notesRouter.put('/:id', (request, response, next) => {
   const body = request.body
