@@ -7,9 +7,7 @@ notesRouter.get("/", (request, response) => {
     });
 });
 
-
 notesRouter.post("/", async (request, response, next) => {
-
     const body = request.body;
 
     const note = new Note({
@@ -35,7 +33,6 @@ notesRouter.delete("/:id", async (request, response) => {
     await Note.findByIdAndRemove(request.params.id);
     response.status(204).end();
 });
-
 notesRouter.put("/:id", (request, response, next) => {
     const body = request.body;
 
